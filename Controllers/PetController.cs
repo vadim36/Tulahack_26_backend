@@ -83,6 +83,8 @@ namespace backend.Controllers
                 UserId = Guid.Parse(userId),
                 Name = dto.Name,
                 Description = dto.Description,
+                City = "",
+                Breed = "",
                 Tags = tags,
                 ImagePath = imagePath,
                 PetType = petType

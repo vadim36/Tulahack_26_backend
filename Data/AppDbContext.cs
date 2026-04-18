@@ -1,4 +1,6 @@
-﻿using backend.Models.Auth;
+﻿using backend.Models.Achivments;
+using backend.Models.Auth;
+using backend.Models.Chats;
 using backend.Models.PetCalendars;
 using backend.Models.Pets;
 using backend.Models.PetsBookmarks;
@@ -16,6 +18,11 @@ namespace backend.Data
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Questionary> Questionarys { get; set; }
+
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+
+        public DbSet<Achievment> Achievments { get; set; }
 
         public DbSet<Pet> Pets { get; set; }
         public DbSet<PetType> PetTypes { get; set; }

@@ -1,4 +1,5 @@
 using backend.Data;
+using backend.Hubs;
 using backend.Services.Image;
 using backend.Services.Password;
 using backend.Services.Token;
@@ -34,6 +35,7 @@ Log.Logger = new LoggerConfiguration()
 #endregion
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 
 var frontend = builder.Configuration["Frontend"];
 
@@ -57,9 +59,15 @@ builder.Services.AddScoped<ImageService>();
 
 #endregion
 
-builder.Services.AddDbContext<AppDbContext>((options) => {
-    var connectionStrings = builder.Configuration.GetSection("ConnectionStrings");
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    if (builder.Environment.IsEnvironment("Testing"))
+    {
+        options.UseInMemoryDatabase("IntegrationTests");
+        return;
+    }
 
+    var connectionStrings = builder.Configuration.GetSection("ConnectionStrings");
     options.UseNpgsql(connectionStrings["postgre"]);
 });
 
@@ -127,11 +135,13 @@ try {
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+    }
 
+    if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Testing"))
+    {
         using (var scope = app.Services.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
             context.Database.EnsureCreated();
         }
     }
@@ -141,7 +151,11 @@ try {
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
-    app.UseHttpsRedirection();
+
+    if (!app.Environment.IsEnvironment("Testing"))
+        app.UseHttpsRedirection();
+
+    app.MapHub<ChatHub>("/hub/chats");
 
     app.Run();
 } catch (Exception ex) {
@@ -150,3 +164,8 @@ try {
 {
     Log.CloseAndFlush();
 }
+
+/// <summary>
+/// Маркер для <see cref="Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory{TEntryPoint}"/> в интеграционных тестах.
+/// </summary>
+public partial class Program { }

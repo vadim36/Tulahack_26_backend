@@ -103,7 +103,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeletePet([FromForm] DeletePetTypeDto dto)
+        public async Task<IActionResult> DeletePet([FromBody] DeletePetTypeDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var petType = await _context.PetTypes.FirstOrDefaultAsync(x => x.Id == dto.Id);

@@ -22,7 +22,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpGet("items")]
-        public async Task<ActionResult<IEnumerable<PetCalendarItem>>> GetCalendarItems([FromForm] CalendarDto dto)
+        public async Task<ActionResult<IEnumerable<PetCalendarItem>>> GetCalendarItems([FromBody] CalendarDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var calendar = await _context.PetCalendars.FirstOrDefaultAsync(x => x.UserId == Guid.Parse(userId) && x.Id == dto.Id);
@@ -32,7 +32,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpPost("items/new")]
-        public async Task<ActionResult<PetCalendarItem>> CreateCalendarItem([FromForm] CreateCalendarItemDto dto)
+        public async Task<ActionResult<PetCalendarItem>> CreateCalendarItem([FromBody] CreateCalendarItemDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -52,7 +52,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpPut("items/update")]
-        public async Task<ActionResult<PetCalendarItem>> UpdateCalendarItem([FromForm] UpdateCalendarItemDto dto)
+        public async Task<ActionResult<PetCalendarItem>> UpdateCalendarItem([FromBody] UpdateCalendarItemDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var updateItem = await _context.PetCalendarItems.FirstOrDefaultAsync(x => x.Id == dto.Id);
@@ -75,7 +75,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpDelete("items/remove")]
-        public async Task<IActionResult> DeleteCalendarItem([FromForm] DeleteCalendarItemDto dto)
+        public async Task<IActionResult> DeleteCalendarItem([FromBody] DeleteCalendarItemDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var calendarItem = await _context.PetCalendarItems.FirstOrDefaultAsync(x => x.Id == dto.Id);
@@ -93,7 +93,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpGet("notes")]
-        public async Task<ActionResult<IEnumerable<PetCalendarNote>>> GetCalendarNotes([FromForm] CalendarDto dto)
+        public async Task<ActionResult<IEnumerable<PetCalendarNote>>> GetCalendarNotes([FromBody] CalendarDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var calendar = await _context.PetCalendars.FirstOrDefaultAsync(x => x.UserId == Guid.Parse(userId) && x.Id == dto.Id);
@@ -103,7 +103,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpPost("notes/new")]
-        public async Task<ActionResult<PetCalendarNote>> CreateCalendarNote([FromForm] CreateCalendarNoteDto dto)
+        public async Task<ActionResult<PetCalendarNote>> CreateCalendarNote([FromBody] CreateCalendarNoteDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -123,7 +123,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpPut("notes/update")]
-        public async Task<ActionResult<PetCalendarNote>> UpdateCalendarNote([FromForm] UpdateCalendarNoteDto dto)
+        public async Task<ActionResult<PetCalendarNote>> UpdateCalendarNote([FromBody] UpdateCalendarNoteDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var updateNote = await _context.PetCalendarNotes.FirstOrDefaultAsync(x => x.Id == dto.Id);
@@ -145,7 +145,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpDelete("notes/remove")]
-        public async Task<IActionResult> DeleteCalendarNotes([FromForm] DeleteCalendarNoteDto dto)
+        public async Task<IActionResult> DeleteCalendarNotes([FromBody] DeleteCalendarNoteDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var calendarNotes = await _context.PetCalendarNotes.FirstOrDefaultAsync(x => x.Id == dto.Id);

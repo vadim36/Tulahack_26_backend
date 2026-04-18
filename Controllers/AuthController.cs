@@ -104,6 +104,7 @@ namespace backend.Controllers
                 PasswordHash = _passwordService.HashPassword(dto.Password),
                 Role = "User",
                 Name = dto.Email,
+                SubscriptionTier = "Free",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };

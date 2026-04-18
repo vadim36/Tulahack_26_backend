@@ -1,4 +1,5 @@
 ﻿using backend.Data;
+using backend.Models.Auth;
 using backend.Models.PetsType;
 using backend.Models.Questionarys;
 using backend.Models.Questionarys.Dto;
@@ -106,6 +107,7 @@ namespace backend.Controllers
                 ageTo = dto.ageTo
             };
 
+            user.Questionary = newQuestionary;
             user.Role = "ActiveUser";
             _context.Users.Update(user);
             _context.Questionarys.Add(newQuestionary);
@@ -119,6 +121,7 @@ namespace backend.Controllers
         public async Task<ActionResult<Questionary>> UpdateQuestionary([FromForm] UpdateQuestionaryDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(userId));
             var questionary = await _context.Questionarys.FirstOrDefaultAsync(x => x.UserId == dto.UserId);
 
             if (questionary == null) { 
@@ -187,6 +190,9 @@ namespace backend.Controllers
                 ageTo = (int)(dto.ageTo != null ? dto.ageTo : questionary.ageTo),
             };
 
+            user.Questionary = updateQuestionary;
+
+            _context.Users.Update(user);
             _context.Questionarys.Update(updateQuestionary);
             await _context.SaveChangesAsync();
 

@@ -15,14 +15,10 @@ namespace backend.Controllers
     public class PetBookmarksController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly ImageService _imageService;
-        private readonly IWebHostEnvironment _environment;
 
-        public PetBookmarksController(AppDbContext context, ImageService imageService, IWebHostEnvironment environment)
+        public PetBookmarksController(AppDbContext context)
         {
             _context = context;
-            _imageService = imageService;
-            _environment = environment;
         }
 
         [Authorize(Roles = "ActiveUser")]
@@ -40,7 +36,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpPost("save")]
-        public async Task<ActionResult<BookmarkResponse>> BookmarkPet([FromForm] BookmarkDto dto)
+        public async Task<ActionResult<BookmarkResponse>> BookmarkPet([FromBody] BookmarkDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var pet = await _context.Pets.FirstOrDefaultAsync(x => x.Id == dto.PetId);
@@ -62,7 +58,7 @@ namespace backend.Controllers
 
         [Authorize(Roles = "ActiveUser")]
         [HttpDelete("remove")]
-        public async Task<IActionResult> UnbookmarkPet([FromForm] UnbookmarkDto dto)
+        public async Task<IActionResult> UnbookmarkPet([FromBody] UnbookmarkDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var pet = await _context.PetBookmarks.FirstOrDefaultAsync(x => x.Id == dto.Id);
