@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: tulahack-back-26
+    ports:
+      - "5000:8080"
+    restart: unless-stopped
