@@ -44,10 +44,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         
-        policy
-            .WithOrigins(frontend)
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+       policy.SetIsOriginAllowed(_ => true)  // Разрешить любой origin
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -136,7 +136,7 @@ try {
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-
+    
     if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Testing"))
     {
         using (var scope = app.Services.CreateScope())
